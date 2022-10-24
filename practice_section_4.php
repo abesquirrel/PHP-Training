@@ -34,7 +34,7 @@
     $v['operation'] = $_POST['operation'] ?? '';
     $v['submit'] = $_POST['submit'];
 
-    if ($v['submit'] && !empty($v['first_digit']) && !empty($v['second_digit']) ) {
+    if ($v['submit'] && isset($v['first_digit']) && isset($v['second_digit']) ) {
         $result = '';
         $result = calculate_two_digits($v['first_digit'],$v['second_digit'],$v['operation']);
     } else {
@@ -47,7 +47,7 @@
     <label for="firstDigit">First digit:</label>
     <input type="number" id="firstDigit" name="firstDigit" value=<?echo $v['first_digit'];?>><br><br>
     <label for="operation">Operation:</label>
-    <select name="operation" id="operation" value=<?echo $v['operation'];?>>
+    <select name="operation" id="operation">
         <option value="addition">Addition</option>
         <option value="subtraction">Subtraction</option>
         <option value="multiplication">Multiplication</option>
