@@ -32,7 +32,7 @@
     $v['first_digit'] = $_POST['firstDigit'] ?? '';
     $v['second_digit'] = $_POST['secondDigit'] ?? '';
     $v['operation'] = $_POST['operation'] ?? '';
-    $v['submit'] = $_POST['submit'];
+    $v['submit'] = $_POST['submit'] ?? '';
 
     if ($v['submit'] && isset($v['first_digit']) && isset($v['second_digit']) ) {
         $result = '';
