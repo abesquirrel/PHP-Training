@@ -33,27 +33,26 @@
     }
 
     $v = [];
-    $username = $_POST['username'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = trim($_POST['password']) ?? '';
-    $password_check = trim($_POST['password_check']) ?? '';
-    $submit = $_POST['submit'];
+    // $v['action'] = !empty($_POST['action']) ? strtolower(str_replace(' ', '_', $_POST['action'])) : null;
+    $username = !empty($_POST['username']) ? strtolower(str_replace(' ', '_', $_POST['username'])) : null;
+    $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
+    $password_check = !empty($_POST['password_check']) ? trim($_POST['password_check']) : null;
+    $submit = isset($_POST['submit']);
 
     $created_at = date("Y-m-d H:i:s");
 
     if (isset($submit)
         && !empty($username)
-        && !empty($email)
         && !empty($password)
         && !empty($password_check)
     ) {
         $hashed_password = '';
-        $query = "INSERT INTO users(username,password,email,created_at) 
-                    VALUES ('{$username}', '{$hashed_password}', '{$email}', '{$created_at}')";
+        $query = "INSERT INTO users(username,password,created_at) 
+                    VALUES ('{$username}', '{$hashed_password}', '{$created_at}')";
         if (validate_password_strength($password)) {
             if (strcmp($password, $password_check) == 0) {
                 $hashed_password = password_hash(trim($password), PASSWORD_DEFAULT);
-                $result = mysqli_query($conn, $query);
+                $result = mysqli_query($mysqli, $query);
             } else {
                 function_alert('Passwords do not match!');
             }
@@ -86,15 +85,6 @@
                                             <label class="form-label" for="username">Your Name</label>
                                         </div>
                                     </div>
-
-                                    <div class="d-flex flex-row align-items-center mb-4">
-                                        <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                                        <div class="form-outline flex-fill mb-0">
-                                            <input type="email" id="email" name="email" class="form-control" />
-                                            <label class="form-label" for="email">Your Email</label>
-                                        </div>
-                                    </div>
-
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
