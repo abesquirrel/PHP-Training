@@ -33,7 +33,6 @@
     }
 
     $v = [];
-    // $v['action'] = !empty($_POST['action']) ? strtolower(str_replace(' ', '_', $_POST['action'])) : null;
     $username = !empty($_POST['username']) ? strtolower(str_replace(' ', '_', $_POST['username'])) : null;
     $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
     $password_check = !empty($_POST['password_check']) ? trim($_POST['password_check']) : null;
@@ -47,17 +46,26 @@
         && !empty($password_check)
     ) {
         $hashed_password = '';
-        $query = "INSERT INTO users(username,password,created_at) 
-                    VALUES ('{$username}', '{$hashed_password}', '{$created_at}')";
-        if (validate_password_strength($password)) {
-            if (strcmp($password, $password_check) == 0) {
-                $hashed_password = password_hash(trim($password), PASSWORD_DEFAULT);
-                $result = mysqli_query($mysqli, $query);
-            } else {
-                function_alert('Passwords do not match!');
-            }
+
+        $query = "SELECT * FROM users WHERE users.username = '{$username}'";
+        $mysqli = '';
+        if (mysqli_num_rows(mysqli_query($mysqli, $query)) > 0) {
+            function_alert("Username already taken.");
         } else {
-            function_alert('Password is not strong enough');
+            if (validate_password_strength($password)) {
+                if (strcmp($password, $password_check) == 0) {
+                    $hashed_password = password_hash(trim($password), PASSWORD_DEFAULT);
+                    $query = "INSERT INTO users(username,password,created_at) 
+                    VALUES ('{$username}', '{$hashed_password}', '{$created_at}')";
+                    $result = mysqli_query($mysqli, $query);
+                    !$result ? function_alert('Account not created!') : function_alert('Successful!');
+
+                } else {
+                    function_alert('Passwords do not match!');
+                }
+            } else {
+                function_alert('Password is not strong enough');
+            }
         }
 
     }
