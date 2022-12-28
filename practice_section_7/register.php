@@ -32,13 +32,11 @@
         echo "<script type='text/javascript'>alert('$msg');</script>";
     }
 
-    $v = [];
     $username = !empty($_POST['username']) ? strtolower(str_replace(' ', '_', $_POST['username'])) : null;
     $password = !empty($_POST['password']) ? trim($_POST['password']) : null;
     $password_check = !empty($_POST['password_check']) ? trim($_POST['password_check']) : null;
-    $submit = isset($_POST['submit']);
-
     $created_at = date("Y-m-d H:i:s");
+    $submit = $_POST['submit'];
 
     if (isset($submit)
         && !empty($username)
@@ -46,9 +44,8 @@
         && !empty($password_check)
     ) {
         $hashed_password = '';
-
-        $query = "SELECT * FROM users WHERE users.username = '{$username}'";
         $mysqli = '';
+        $query = "SELECT * FROM users WHERE users.username = '{$username}'";
         if (mysqli_num_rows(mysqli_query($mysqli, $query)) > 0) {
             function_alert("Username already taken.");
         } else {
@@ -67,10 +64,7 @@
                 function_alert('Password is not strong enough');
             }
         }
-
     }
-
-
 ?>
 
 <section class="vh-100" style="background-color: #eee;">
@@ -81,16 +75,13 @@
                     <div class="card-body p-md-5">
                         <div class="row justify-content-center">
                             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
-
                                 <form class="mx-1 mx-md-4" action="<?=$_SERVER['PHP_SELF'];?>" method="post">
-
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
                                             <input type="text" id="username" name="username" class="form-control" />
-                                            <label class="form-label" for="username">Your Name</label>
+                                            <label class="form-label" for="username">Your Username</label>
                                         </div>
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
@@ -108,11 +99,9 @@
                                             <label class="form-label" for="password_check">Repeat your password</label>
                                         </div>
                                     </div>
-
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                        <input type="submit" name="submit" class="btn btn-primary btn-lg">
+                                        <input type="submit" name="submit" value="Register" class="btn btn-primary btn-lg">
                                     </div>
-
                                 </form>
                             </div>
                         </div>
