@@ -1,21 +1,6 @@
 <?php
 	require('functions.php');
 
-	function validate_password_strength($password): bool
-	{
-		// Validate password strength
-		$uppercase = preg_match('@[A-Z]@', $password);
-		$lowercase = preg_match('@[a-z]@', $password);
-		$number = preg_match('@[0-9]@', $password);
-		$specialChars = preg_match('@\W@', $password);
-
-		if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($password) < 8) {
-			return false;
-		}else{
-			return true;
-		}
-	}
-
 	$username = !empty($_POST['username']) ? strtolower(str_replace(' ', '_', $_POST['username'])) : null;
 	$password = !empty($_POST['password']) ? trim($_POST['password']) : null;
 	$password_check = !empty($_POST['password_check']) ? trim($_POST['password_check']) : null;
@@ -29,7 +14,7 @@
 		$hashed_password = '';
 		$query = "SELECT * FROM users WHERE users.username = '{$username}'";
 		$result = mysqli_query($mysqli, $query);
-		if (!is_null($result)) {
+		if (is_null($result)) {
 			function_alert("Username already taken.");
 		} else {
 			if (validate_password_strength($password)) {
